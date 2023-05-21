@@ -71,6 +71,22 @@ async function run() {
       res.send(result)
     })
 
+    app.put('/myToy/:id', async(req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const options = { upsert: true };
+      const updatedMyToy = req.body;
+      const toy = {
+        $set: {
+          quantity: updatedMyToy.quantity,
+          price: updatedMyToy.price,
+          description: updatedMyToy.description
+        }
+      }
+      const result = await toyCollection.updateOne(filter, toy, options);
+      res.send(result)
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -80,8 +96,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 app.get('/', (req, res) => {
     res.send('toy marketplace server is running');
