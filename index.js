@@ -50,12 +50,24 @@ async function run() {
 
     app.get('/myToys', async(req, res) => {
       console.log(req.query.email);
+      const email = req.query?.email;
+      const sort = req.query?.priceSort;
       let query = {};
-      if(req.query?.email) {
-        query = {sellerEmail: req.query.email}
+      if(email) {
+        query = {sellerEmail: email}
       }
-      const result = await toyCollection.find(query).toArray();
-      res.send(result)
+      if(sort == 'ascending') {
+        const result = await toyCollection.find(query).sort({price: 1}).toArray();
+        res.send(result)
+      }
+      else if (sort == 'descending') {
+        const result = await toyCollection.find(query).sort({price: -1}).toArray();
+        res.send(result)
+      }
+      else {
+        const result = await toyCollection.find(query).toArray();
+        res.send(result)
+      }
     })
     
     app.post('/toys', async(req, res) => {
