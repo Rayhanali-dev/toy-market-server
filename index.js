@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
@@ -34,6 +34,20 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/toys/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await toyCollection.findOne(query);
+      res.send(result)
+    })
+
+    app.get('/categoryToys/:category', async(req, res) => {
+      const category = req.params.category;
+      const query = {toyCategory: category}
+      const result = await toyCollection.find(query).limit(2).toArray();
+      res.send(result);
+    })
+
     app.get('/myToys', async(req, res) => {
       console.log(req.query.email);
       let query = {};
@@ -47,6 +61,13 @@ async function run() {
     app.post('/toys', async(req, res) => {
       const toy = req.body;
       const result = await toyCollection.insertOne(toy);
+      res.send(result)
+    })
+
+    app.delete('/myToy/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await toyCollection.deleteOne(query);
       res.send(result)
     })
 
