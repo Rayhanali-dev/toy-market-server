@@ -44,7 +44,6 @@ async function run() {
 
     app.get('/toys/:text', async (req, res) => {
       const searchText = req.params.text;
-      console.log(searchText)
       const result = await toyCollection.find({
         $or: [
           { name: { $regex: searchText, $options: "i" } }
@@ -70,7 +69,6 @@ async function run() {
     })
 
     app.get('/myToys', async(req, res) => {
-      console.log(req.query.email);
       const email = req.query?.email;
       const sort = req.query?.priceSort;
       let query = {};
@@ -106,7 +104,6 @@ async function run() {
 
     app.put('/updatedToy/:id', async(req, res) => {
       const id = req.params.id;
-      console.log(id)
       const filter = {_id: new ObjectId(id)};
       const options = { upsert: true };
       const updatedMyToy = req.body;
