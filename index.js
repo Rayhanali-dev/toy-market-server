@@ -104,8 +104,9 @@ async function run() {
       res.send(result)
     })
 
-    app.put('/myToy/:id', async(req, res) => {
+    app.put('/updatedToy/:id', async(req, res) => {
       const id = req.params.id;
+      console.log(id)
       const filter = {_id: new ObjectId(id)};
       const options = { upsert: true };
       const updatedMyToy = req.body;
